@@ -4,11 +4,11 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.araitanga.helloMaven</groupId>
-  <artifactId>helloMaven</artifactId>
+  <groupId>com.araitanga.timelapseFace</groupId>
+  <artifactId>timelapseFace</artifactId>
   <version>1.0.0</version>
 
-  <name>helloMaven</name>
+  <name>timelapseFace</name>
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
 
@@ -25,6 +25,13 @@
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
+	<!-- https://mvnrepository.com/artifact/commons-cli/commons-cli -->
+	<!-- Added to allow running from commandline -->
+	<dependency>
+		<groupId>commons-cli</groupId>
+		<artifactId>commons-cli</artifactId>
+		<version>1.4</version>
+	</dependency>
   </dependencies>
 
   <build>
@@ -53,11 +60,11 @@
           <version>3.0.2</version>
 		  <configuration>
 			<archive>
-				<manifest>
-					<addClasspath>true</addClasspath>
-					<classpathPrefix>/</classpathPrefix>
-					<mainClass>com.araitanga.helloMaven.App</mainClass>
-				</manifest>
+			   <!-- required since the transform in maven-shade does not appear to work -->
+			  <manifest>
+				<addClasspath>true</addClasspath>
+				<mainClass>com.araitanga.timelapseFace.App</mainClass>
+			  </manifest>
 			</archive>
 		  </configuration>
         </plugin>
@@ -78,6 +85,46 @@
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.0.0</version>
         </plugin>
+		<plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+        </configuration>
+      </plugin>
+	  <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>2.3</version>
+				<executions>
+					<!-- Run shade goal on package phase -->
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<transformers>
+								<!-- add Main-Class to manifest file -->
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<mainClass>com.araitanga.timelapseFace.App</mainClass>
+								</transformer>
+							</transformers>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
       </plugins>
     </pluginManagement>
   </build>
