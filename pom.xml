@@ -32,6 +32,12 @@
 		<artifactId>commons-cli</artifactId>
 		<version>1.4</version>
 	</dependency>
+	<!-- Added to read photo metadata for rotation -->
+	<dependency>
+	  <groupId>com.drewnoakes</groupId>
+	  <artifactId>metadata-extractor</artifactId>
+	  <version>2.11.0</version>
+	</dependency>
   </dependencies>
 
   <build>
