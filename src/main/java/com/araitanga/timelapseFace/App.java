@@ -8,10 +8,17 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.ParseException;
 
-import com.drew.imaging.jpeg.JpegMetadataReader;
-import com.drew.imaging.jpeg.JpegProcessingException;
-import com.drew.metadata.exif.ExifReader;
-import com.drew.metadata.iptc.IptcReader;
+
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.imaging.ImageProcessingException;
+// import com.drew.imaging.jpeg.JpegMetadataReader;
+// import com.drew.imaging.jpeg.JpegProcessingException;
+// import com.drew.imaging.jpeg.JpegSegmentMetadataReader;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.MetadataException;
+import com.drew.metadata.Directory;
+import com.drew.metadata.exif.ExifIFD0Directory;
+// import com.drew.metadata.iptc.IptcReader;
 
 import java.io.IOException;
 import java.io.File;
@@ -47,18 +54,8 @@ public class App
 			}
 			else {
 				System.out.println("Now running app");
-				try {
-					File file = new File("~/Development/timelapseFace/src/test/resources/ExifRotate6.jpg");
-					Metadata metadata = JpegMetadataReader.readMetadata(file);
-					print(metadata, "using JpegMetadataReader");
-				}
-				catch(JpegProcessingException e){
-					System.out.println("JpegProcExp");
-				}
-				catch(IOException e) {
-					System.out.println("IOexp");
-				}
-			 }
+				chkImage();
+			}
 		}
 		catch(ParseException exp) {
 			System.out.println("Failed to parse options. Reason :"+ exp.getMessage() );
@@ -66,5 +63,64 @@ public class App
 
 		
     }
+
+	public static class ImageInformation {
+		public final int orientation;
+		public final int width;
+		public final int height;
+
+		public ImageInformation(int orientation, int width, int height) {
+			this.orientation = orientation;
+			this.width = width;
+			this.height = height;
+		}
+
+		public String toString() {
+			return String.format("%dx%d,%d", this.width, this.height, this.orientation);
+		}
+	}
+	
+	static void chkImage(){
+		File imageFile = new File("../inputImg/EC060031.JPG");
+		try{
+			Metadata metadata = ImageMetadataReader.readMetadata(imageFile);
+			Directory directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
+			int orientation = 1;
+			orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
+			System.out.println("oritnation = " + orientation);
+		}
+		catch(ImageProcessingException ipx){
+			System.out.println("Failed read metadata from image");
+		}
+		catch(IOException iox){
+			System.out.println("Failed read file from image");
+		}
+		catch(MetadataException mex){
+			System.out.println("Failed read tag from image");
+		}
+
+
+		
+	}
+	
+
+/**	
+	public static ImageInformation readImageInformation(File imageFile)  throws IOException, MetadataException, ImageProcessingException {
+    Metadata metadata = ImageMetadataReader.readMetadata(imageFile);
+    Directory directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
+    JpegDirectory jpegDirectory = metadata.getFirstDirectoryOfType(JpegDirectory.class);
+
+    int orientation = 1;
+    try {
+        orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
+    } catch (MetadataException me) {
+        logger.warn("Could not get orientation");
+    }
+    int width = jpegDirectory.getImageWidth();
+    int height = jpegDirectory.getImageHeight();
+
+    return new ImageInformation(orientation, width, height);
+	}
+	**/
 
 }
