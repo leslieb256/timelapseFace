@@ -5,4 +5,4 @@
  - Display help if no options given (currently executes but later will be able to choose stuff.
  
  Many thanks to StackOverflow.com without whose help this would not have been possible.
- 
+Test landscape image from Dave Perret (Github/@recuser) 
