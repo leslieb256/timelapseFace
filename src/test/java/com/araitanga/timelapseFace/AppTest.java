@@ -1,4 +1,4 @@
-package com.araitanga.helloMaven;
+package com.araitanga.timelapseFace;
 
 import static org.junit.Assert.assertTrue;
 

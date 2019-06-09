@@ -38,6 +38,14 @@
 	  <artifactId>metadata-extractor</artifactId>
 	  <version>2.11.0</version>
 	</dependency>
+	<!-- Added primarily for locating facial features but also does image manipulation 
+		 Note that this includes both the org.opencv java api AND the os specific linked libraries.
+	-->
+    <dependency>
+      <groupId>org.openpnp</groupId>
+      <artifactId>opencv</artifactId>
+      <version>3.4.2-1</version>
+    </dependency>
   </dependencies>
 
   <build>
