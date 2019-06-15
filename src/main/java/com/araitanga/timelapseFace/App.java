@@ -19,6 +19,9 @@ import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.objdetect.CascadeClassifier;
+import org.opencv.imgcodecs.Imgcodecs;
+
+
 
 import java.io.IOException;
 import java.io.File;
@@ -119,6 +122,8 @@ public class App
         faceCascade.load(classifierPath);
         System.out.println("Face detection cascade loaded from: " + classifierPath);
 
+		
+        Mat img = Imgcodecs.imread("EC060031.JPG", Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
 	}
 
 
